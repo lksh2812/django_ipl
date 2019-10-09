@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+IPL DATA
+<div><a href="{% url 'batting_average:matches_per_season' %}">matches per season</a></div>
+<div><a href="{% url 'batting_average:matches_won' %}">matches won per year per team </a></div>
+<div><a href="{% url 'batting_average:extra_runs' %}">extra per team </a></div>
+<div><a href="{% url 'batting_average:bowlers_economy' %}">bowlers_economy </a></div>
+{% endblock %}
