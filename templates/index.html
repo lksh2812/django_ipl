@@ -1,8 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
 IPL DATA
-<div><a href="{% url 'batting_average:matches_per_season' %}">matches per season</a></div>
-<div><a href="{% url 'batting_average:matches_won' %}">matches won per year per team </a></div>
-<div><a href="{% url 'batting_average:extra_runs' %}">extra per team </a></div>
-<div><a href="{% url 'batting_average:bowlers_economy' %}">bowlers_economy </a></div>
+    <nav class="navbar navbar-light bg-light">
+        <form class="form-inline">
+            <button class="btn btn-outline-success" type="button" onclick="MatchesPerSeason()">Matches per Season</button>
+            <!-- <a href="{% url 'batting_average:matches_per_season' %}"><button class="btn btn-outline-success" type="button" onclick="MatchesPerSeason()">Matches per Season</button></a> -->
+            <a href="{% url 'batting_average:matches_won' %}"><button class="btn btn-outline-success" type="button">Matches Won</button></a>
+            <a href="{% url 'batting_average:extra_runs' %}"><button class="btn btn-outline-success" type="button">Extras Given</button></a>
+            <a href="{% url 'batting_average:bowlers_economy' %}"><button class="btn btn-outline-success" type="button">Economiacal Bowlers</button></a>
+        </form>
+    </nav>
+
+    <div id="container" style="width:100%; height:400px;">
+
+
+    </div>
+
 {% endblock %}

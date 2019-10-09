@@ -1,6 +1,6 @@
-function PlotFirst() {
+function MatchesPerSeason() {
     let host = window.location.host
-    fetch(`http://${host}/ipl/api/first/`)
+    fetch(`http://${host}/api/matches_per_season`)
         .then(response => response.json())
         .then((result) => {
             seasons = result['seasons'];

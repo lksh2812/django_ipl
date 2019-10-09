@@ -22,7 +22,7 @@ def bowlers_economy(request):
             is_super_over=False).values('bowler').annotate(\
             runs=Sum('batsman_runs')+Sum('wide_runs')+Sum('noball_runs')). \
             annotate(balls= Count('ball')-Count(Case(When(noball_runs__gt=0, then=1)))\
-            -Count(Case(When(wide_runs__gt=0, then=1)))).order_by('runs')
+            -Count(Case(When(wide_runs__gt=0, then=1)))).annotate(economy= Cast((F('runs')/(F('balls')/6.0)), FloatField())).order_by('economy')[:10]
     # print(queryset)
     queryset = list(queryset)
     return JsonResponse(queryset, safe=False)
@@ -43,9 +43,10 @@ def matches_won(request):
 
 def matches_per_season(request):
     queryset = Matches.objects.all().values('season').annotate(count=Count('season')).order_by('season')
-    # print(queryset)
-    queryset = list(queryset)
-    return JsonResponse(queryset, safe=False)
+    seasons = [i['season'] for i in queryset]
+    matches = [i['count'] for i in queryset]
+    print(seasons, matches)
+    return JsonResponse({'seasons':seasons, 'matches':matches})
 
 def home(request):
     return render(request, 'index.html')
