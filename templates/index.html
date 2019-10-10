@@ -1,16 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 IPL DATA
-    <nav class="navbar navbar-light bg-light">
-        <form class="form-inline">
-            <!-- <button class="btn btn-outline-success" type="button" onclick="MatchesPerSeason()">Matches per Season</button> -->
-            <a href="{% url 'batting_average:matches_per_season' %}"><button class="btn btn-outline-success" type="button">Matches per Season</button></a>
-            <a href="{% url 'batting_average:matches_won' %}"><button class="btn btn-outline-success" type="button">Matches Won</button></a>
-            <a href="{% url 'batting_average:extra_runs' %}"><button class="btn btn-outline-success" type="button">Extras Given</button></a>
-            <a href="{% url 'batting_average:bowlers_economy' %}"><button class="btn btn-outline-success" type="button">Economiacal Bowlers</button></a>
-        </form>
-    </nav>
-
+    
     <div id="container" style="width:100%; height:400px;">
 
 

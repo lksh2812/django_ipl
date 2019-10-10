@@ -4,13 +4,15 @@
 
 IPL DATA
 <div id="container" style="width:100%; height:400px;">
-{{bowling_team}}
+        
 
 </div>
 <script> 
+
+    console.log(JSON.parse({{ bowling_team }}))
+    
     document.addEventListener('DOMContentLoaded', function () {
-        teams = ["Gujarat Lions", "Kings XI Punjab", "Mumbai Indians", "Delhi Daredevils", "Sunrisers Hyderabad", "Rising Pune Supergiants", "Kolkata Knight Riders", "Royal Challengers Bangalore"];
-        
+        {{ bowling_team }};
         extra_runs = {{ extra_runs }};
 
         var chart = Highcharts.chart("container", {

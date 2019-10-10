@@ -14,6 +14,18 @@
     <script type="text/javascript" src="{% static '/main.js'%}"></script>
   </head>
   <body>
+      <nav class="navbar navbar-light bg-light">
+          <form class="form-inline">
+              <button class="btn btn-outline-success" type="button" onclick="MatchesPerSeason()">Matches per Season</button>
+              <button class="btn btn-outline-success" type="button" onclick="MatchesWon()">Matches won per Team per Season</button>
+              <button class="btn btn-outline-success" type="button" onclick="ExtraRuns()">Extra runs conceded</button>
+              <button class="btn btn-outline-success" type="button" onclick="BowlersEconomy()">Top economical bowlers</button>
+              <!-- <a href="{% url 'batting_average:matches_per_season' %}"><button class="btn btn-outline-success" type="button">Matches per Season</button></a> -->
+              <!-- <a href="{% url 'batting_average:matches_won' %}"><button class="btn btn-outline-success" type="button">Matches Won</button></a> -->
+              <!-- <a href="{% url 'batting_average:extra_runs' %}"><button class="btn btn-outline-success" type="button">Extras Given</button></a> -->
+              <!-- <a href="{% url 'batting_average:bowlers_economy' %}"><button class="btn btn-outline-success" type="button">Economiacal Bowlers</button></a> -->
+          </form>
+      </nav>
     
     <div class="container">
     {% block content %}
