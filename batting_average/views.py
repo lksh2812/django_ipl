@@ -5,6 +5,10 @@ from django.db.models import Count, Sum, Subquery, Q, Case, When, FloatField, F
 from django.db.models.functions import Cast
 from django.http import JsonResponse
 import json
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.views.decorators.cache import cache_page
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 # from .serializers import MatchSerializer
 from .models import Matches, Delivery
@@ -15,7 +19,7 @@ from .models import Matches, Delivery
 #     print(queryset)
 #     serializer_class = MatchSerializer
 
-
+@cache_page(CACHE_TTL)
 def bowlers_economy(request):
     queryset = Delivery.objects.filter(match_id__season=2015, \
             is_super_over=False).values('bowler').annotate(\
@@ -37,7 +41,7 @@ def bowlers_economy(request):
 #     return render(request, 'bowlers_eco.html', {'bowlers':bowlers, \
 #     'eco':eco})
 
-
+@cache_page(CACHE_TTL)
 def extra_runs(request):
     queryset = Delivery.objects.filter(match_id__season=2016, \
             is_super_over=False).values('bowling_team').annotate(\
@@ -57,7 +61,7 @@ def extra_runs(request):
 #     return render(request, 'extra_runs.html', {'bowling_team':bowling_team.content, \
 #     'extra_runs':extra_runs})
 
-
+@cache_page(CACHE_TTL)
 def matches_won(request):
     seasons = Matches.objects.all().values('season').order_by('season').distinct()
     teams = Matches.objects.exclude(winner=None).values('winner').order_by('winner').distinct()
@@ -94,7 +98,7 @@ def matches_won(request):
 #     return render(request, 'matches_won.html')
     
 
-
+@cache_page(CACHE_TTL)
 def matches_per_season(request):
     queryset = Matches.objects.all().values('season').annotate(count=Count('season')).order_by('season')
     queryset = list(queryset)
