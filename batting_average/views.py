@@ -4,6 +4,7 @@ from rest_framework import viewsets
 from django.db.models import Count, Sum, Subquery, Q, Case, When, FloatField, F
 from django.db.models.functions import Cast
 from django.http import JsonResponse
+import json
 
 # from .serializers import MatchSerializer
 from .models import Matches, Delivery
@@ -27,6 +28,9 @@ def bowlers_economy(request):
     queryset = list(queryset)
     return JsonResponse(queryset, safe=False)
 
+
+    
+
 def extra_runs(request):
     queryset = Delivery.objects.filter(match_id__season=2016, \
             is_super_over=False).values('bowling_team').annotate(\
@@ -35,18 +39,28 @@ def extra_runs(request):
     queryset = list(queryset)
     return JsonResponse(queryset, safe=False)
 
-def matches_won(request):
+
+def matches_won_query(request):
     queryset = Matches.objects.all().values('winner','season').annotate(count=Count('winner')).order_by('season')
-    # print(queryset)
+    queryset = list(queryset)
+    return JsonResponse(queryset, safe=False)
+
+
+def matches_won(request):
+    queryset = json.loads(matches_won_query(request).content)
+    
+
+
+def first(request):
+    queryset = Matches.objects.all().values('season').annotate(count=Count('season')).order_by('season')
     queryset = list(queryset)
     return JsonResponse(queryset, safe=False)
 
 def matches_per_season(request):
-    queryset = Matches.objects.all().values('season').annotate(count=Count('season')).order_by('season')
+    queryset = json.loads(first(request).content)
     seasons = [i['season'] for i in queryset]
     matches = [i['count'] for i in queryset]
-    print(seasons, matches)
-    return JsonResponse({'seasons':seasons, 'matches':matches})
+    return render(request, 'plot.html', {'seasons':seasons, 'matches':matches})
 
 def home(request):
     return render(request, 'index.html')

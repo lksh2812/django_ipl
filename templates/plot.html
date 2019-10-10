@@ -9,29 +9,37 @@ IPL DATA
 </div>
 <script> 
     document.addEventListener('DOMContentLoaded', function () {
-        var myChart = Highcharts.chart('container', {
-            chart: {
-                type: 'bar'
-            },
-            title: {
-                text: 'Fruit Consumption'
-            },
-            xAxis: {
-                categories: ['Apples', 'Bananas', 'Oranges']
-            },
-            yAxis: {
+        seasons = {{ seasons }};
+        matches = {{ matches }};
+
+        var chart = Highcharts.chart("container", {
                 title: {
-                    text: 'Fruit eaten'
-                }
-            },
-            series: [{
-                name: 'Jane',
-                data: [1, 0, 4]
-            }, {
-                name: 'John',
-                data: [5, 7, 3]
-            }]
-        });
+                    text: "Matches per Season"
+                },
+                subtitle: {
+                    text: "IPL Data"
+                },
+                xAxis: {
+                    title: {
+                        text: "Seasons"
+                    },
+                    categories: seasons
+                },
+                yAxis: {
+                    title: {
+                        text: "Match played"
+                    }
+                },
+                series: [
+                    {
+                        type: "column",
+                        name: "Matches",
+                        colorByPoint: true,
+                        data: matches,
+                        showInLegend: false
+                    }
+                ]
+            });
     });
 </script>
 
