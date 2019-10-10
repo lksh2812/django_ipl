@@ -18,26 +18,42 @@ from .models import Matches, Delivery
 def demo(request):
     pass
 
-def bowlers_economy(request):
+def bowlers_economy_query(request):
     queryset = Delivery.objects.filter(match_id__season=2015, \
             is_super_over=False).values('bowler').annotate(\
             runs=Sum('batsman_runs')+Sum('wide_runs')+Sum('noball_runs')). \
             annotate(balls= Count('ball')-Count(Case(When(noball_runs__gt=0, then=1)))\
             -Count(Case(When(wide_runs__gt=0, then=1)))).annotate(economy= Cast((F('runs')/(F('balls')/6.0)), FloatField())).order_by('economy')[:10]
-    # print(queryset)
     queryset = list(queryset)
     return JsonResponse(queryset, safe=False)
 
 
-    
+def bowlers_economy(request):
+    queryset = json.loads(bowlers_economy_query(request).content)
+    print(queryset)
+    bowlers = [i['bowler'] for i in queryset]
+    eco = [i['economy'] for i in queryset]
+    print(bowlers, eco)
+    return render(request, 'bowlers_eco.html', {'bowlers':bowlers, \
+    'eco':eco})
 
-def extra_runs(request):
+
+def extra_runs_query(request):
     queryset = Delivery.objects.filter(match_id__season=2016, \
             is_super_over=False).values('bowling_team').annotate(\
             sum=Sum('extra_runs')).order_by('sum')
-    # print(queryset)
     queryset = list(queryset)
     return JsonResponse(queryset, safe=False)
+
+
+def extra_runs(request):
+    queryset = json.loads(extra_runs_query(request).content)
+    bowling_team = [i['bowling_team'] for i in queryset]
+    extra_runs = [i['sum'] for i in queryset]
+    bowling_team = json.dumps(bowling_team)
+    print(bowling_team)
+    return render(request, 'extra_runs.html', {'bowling_team':bowling_team, \
+    'extra_runs':extra_runs})
 
 
 def matches_won_query(request):

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+IPL DATA
+<div id="container" style="width:100%; height:400px;">
+{{ bowlers }}
+{{ eco }}
+
+</div>
+<script> 
+    document.addEventListener('DOMContentLoaded', function () {
+        bowlers = ['RN ten Doeschate', 'J Yadav', 'V Kohli', 'R Ashwin', 'S Nadeem', 'Parvez Rasool', 'MC Henriques', 'Z Khan', 'MA Starc', 'GB Hogg'];
+        eco = {{ eco }};
+
+        var chart = Highcharts.chart("container", {
+                title: {
+                    text: "Top Economical Bowlers in 2015"
+                },
+                subtitle: {
+                    text: "IPL Data"
+                },
+                xAxis: {
+                    title: {
+                        text: "Bowlers"
+                    },
+                    categories: bowlers
+                },
+                yAxis: {
+                    title: {
+                        text: "Economy"
+                    }
+                },
+                series: [
+                    {
+                        type: "column",
+                        name: "Economy",
+                        colorByPoint: true,
+                        data: eco,
+                        showInLegend: false
+                    }
+                ]
+            });
+    });
+</script>
+
+{% endblock %}
