@@ -9,6 +9,7 @@ from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.views.decorators.cache import cache_page
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+from django.forms import ModelForm
 
 # from .serializers import MatchSerializer
 from .models import Matches, Delivery
@@ -18,6 +19,26 @@ from .models import Matches, Delivery
 #     queryset = Matches.objects.all().values('season').order_by('season')
 #     print(queryset)
 #     serializer_class = MatchSerializer
+
+class MatchForm(ModelForm):
+    
+     class Meta:
+            model = Matches
+            fields = __all__
+
+def get_match(request, id):
+    queryset = Matches.objects.values().get(pk=id)
+    # queryset = list(queryset)
+    # print(queryset.season)
+    # print('1',help(queryset))
+    # print('2',dir(queryset))
+    # print('3',queryset.__dict__)
+    # k = queryset.__dict__.keys()
+    # v = queryset.__dict__.values()
+    # print(v,k)
+
+    return JsonResponse(queryset, safe=False)
+
 
 @cache_page(CACHE_TTL)
 def bowlers_economy(request):
