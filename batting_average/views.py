@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from rest_framework import viewsets
 from django.db.models import Count, Sum, Subquery, Q, Case, When, FloatField, F
 from django.db.models.functions import Cast
@@ -10,6 +10,8 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.views.decorators.cache import cache_page
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 from django.forms import ModelForm
+from django.views.decorators.csrf import csrf_exempt
+
 
 # from .serializers import MatchSerializer
 from .models import Matches, Delivery
@@ -21,23 +23,53 @@ from .models import Matches, Delivery
 #     serializer_class = MatchSerializer
 
 class MatchForm(ModelForm):
-    
      class Meta:
             model = Matches
-            fields = __all__
+            fields = '__all__'
 
+
+def create_delivery(request):
+    pass
+
+@csrf_exempt
+def create_match(request):
+    body_unicode = request.body.decode('utf-8')
+    print('un',body_unicode)
+    body = json.loads(body_unicode)
+    print('body',body)
+    u = Matches(**body)
+    print('u',u)
+    u.save()
+    return JsonResponse({"result": "OK"})
+
+@csrf_exempt
 def get_match(request, id):
-    queryset = Matches.objects.values().get(pk=id)
-    # queryset = list(queryset)
-    # print(queryset.season)
-    # print('1',help(queryset))
-    # print('2',dir(queryset))
-    # print('3',queryset.__dict__)
-    # k = queryset.__dict__.keys()
-    # v = queryset.__dict__.values()
-    # print(v,k)
+    if request.method == 'DELETE':
+        queryset = Matches.objects.get(pk=id).delete()
+        queryset = {'result':"deleted"}
+
+    elif request.method == 'GET':
+        try:
+            queryset = Matches.objects.values().get(pk=id)
+        except Matches.DoesNotExist:
+            raise Http404
 
     return JsonResponse(queryset, safe=False)
+
+@csrf_exempt
+def get_deliveries(request, id):
+    id+=150460
+    if request.method == 'DELETE':
+        delivery = Delivery.objects.get(pk=id).delete()
+        delivery = {'result':"deleted"}
+
+    elif request.method == 'GET':
+        try:
+            delivery = Delivery.objects.values().get(pk=id)
+        except Delivery.DoesNotExist:
+            raise Http404
+
+    return JsonResponse(delivery, safe=False)
 
 
 @cache_page(CACHE_TTL)
