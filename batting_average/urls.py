@@ -17,4 +17,6 @@ urlpatterns = [
     path('api/deliveries/<int:id>', views.get_deliveries, name='get_deliveries'),
     path('api/create_match', views.create_match, name='create_match'),
     path('api/create_delivery', views.create_delivery, name='create_delivery'),
+    path('api/update_match/<int:id>', views.update_match, name='update_match'),
+    path('api/update_delivery/<int:id>', views.update_delivery, name='update_delivery'),
 ]

@@ -27,18 +27,35 @@ class MatchForm(ModelForm):
             model = Matches
             fields = '__all__'
 
+@csrf_exempt
+def update_delivery(request, id):
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    Delivery.objects.filter(pk=id).update(**body)
+    return JsonResponse({"result": "OK"})
 
+
+@csrf_exempt
+def update_match(request, id):
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    Matches.objects.filter(pk=id).update(**body)
+    return JsonResponse({"result": "OK"})
+
+
+@csrf_exempt
 def create_delivery(request):
-    pass
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    u = Delivery(**body)
+    u.save()
+    return JsonResponse({"result": "OK"})
 
 @csrf_exempt
 def create_match(request):
     body_unicode = request.body.decode('utf-8')
-    print('un',body_unicode)
     body = json.loads(body_unicode)
-    print('body',body)
     u = Matches(**body)
-    print('u',u)
     u.save()
     return JsonResponse({"result": "OK"})
 
@@ -58,7 +75,6 @@ def get_match(request, id):
 
 @csrf_exempt
 def get_deliveries(request, id):
-    id+=150460
     if request.method == 'DELETE':
         delivery = Delivery.objects.get(pk=id).delete()
         delivery = {'result':"deleted"}
