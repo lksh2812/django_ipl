@@ -12,20 +12,29 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 from django.forms import ModelForm
 from django.views.decorators.csrf import csrf_exempt
 
-
-# from .serializers import MatchSerializer
+from rest_framework import generics
+from .serializers import MatchSerializer, DeliverySerializer
 from .models import Matches, Delivery
 
 
-# class MatchViewSet(viewsets.ModelViewSet):
-#     queryset = Matches.objects.all().values('season').order_by('season')
-#     print(queryset)
-#     serializer_class = MatchSerializer
+class DeliveryList(generics.ListCreateAPIView):
+    queryset = Delivery.objects.all()
+    serializer_class = DeliverySerializer
 
-class MatchForm(ModelForm):
-     class Meta:
-            model = Matches
-            fields = '__all__'
+
+class DeliveryDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Delivery.objects.all()
+    serializer_class = DeliverySerializer
+
+
+class MatchList(generics.ListCreateAPIView):
+    queryset = Matches.objects.all()
+    serializer_class = MatchSerializer
+
+
+class MatchDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Matches.objects.all()
+    serializer_class = MatchSerializer
 
 @csrf_exempt
 def update_delivery(request, id):
@@ -141,7 +150,7 @@ def matches_won(request):
     team_with_data = {}
     for team in teams:
         team_with_data[team['winner']] = [0]*len(seasons)
-    print (seasons_list, team_with_data)
+    
     for row in queryset:
         season = row['season']
         winner = row['winner']

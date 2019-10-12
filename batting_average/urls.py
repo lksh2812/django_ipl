@@ -1,6 +1,6 @@
 from django.urls import path, include
 from . import views
-# from rest_framework import routers
+from rest_framework import routers
 
 
 # router = routers.DefaultRouter()
@@ -19,4 +19,12 @@ urlpatterns = [
     path('api/create_delivery', views.create_delivery, name='create_delivery'),
     path('api/update_match/<int:id>', views.update_match, name='update_match'),
     path('api/update_delivery/<int:id>', views.update_delivery, name='update_delivery'),
+    
+    # path('', include(router.urls)),
+
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('matches/', views.MatchList.as_view()),
+    path('matches/<int:pk>/', views.MatchDetail.as_view()),
+    path('deliveries/', views.DeliveryList.as_view()),
+    path('deliveries/<int:pk>/', views.DeliveryDetail.as_view()),
 ]
